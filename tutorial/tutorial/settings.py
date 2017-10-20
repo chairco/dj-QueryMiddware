@@ -74,7 +74,18 @@ DATABASES = {
     # Raises ImproperlyConfigured exception if DATABASE_URL not in
     # os.environ
     'default': env.db(),
+    'db1': dj_database_url.config(env='DATABASE_URL_DB1'),
+    'db2': dj_database_url.config(env='DATABASE_URL_DB2'),
     'eda': dj_database_url.config(env='DATABASE_URL_EDA')
+}
+
+# Use multi-database in django
+
+DATABASE_ROUTERS = ['tutorial.database_router.DatabaseAppsRouter']
+DATABASE_APPS_MAPPING = {
+    # example:
+    #'app_name':'database_name',
+    'tutorial': 'eda',
 }
 
 
