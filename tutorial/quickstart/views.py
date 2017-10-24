@@ -1,6 +1,14 @@
 from django.contrib.auth.models import User, Group
+from django.db import connection, connections
+
 from rest_framework import viewsets
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+
 from quickstart.serializers import UserSerializer, GroupSerializer
+
+
+
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -17,3 +25,30 @@ class GroupViewSet(viewsets.ModelViewSet):
     """
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
+
+
+@api_view(['GET', 'POST'])
+def edc_glass_history(requests):
+    """
+    API endpoint that allo connect Oracle db.
+    """
+    if requests.method == 'GET':
+        glass_id = requests.get('glass_id')
+        try:
+            cursor = connections['eda'].cursor()
+            cursor.execute(
+                """
+                SELECT "GLASS_ID", "STEP_ID", "GLASS_START_TIME" 
+                FROM lcdsys.array_pds_glass_t t
+                WHERE 1=1
+                AND t.glass_id = :glass_id
+                ORDER BY glass_start_time
+                """,
+                {'glass_id': glass_id}
+            )
+            queryset = cursor.fetchall()
+            cursor.close()
+        except Exception as e:
+            raise e
+
+        return Response(rows)
