@@ -8,9 +8,6 @@ from rest_framework.response import Response
 from quickstart.serializers import UserSerializer, GroupSerializer
 
 
-
-
-
 class UserViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
@@ -28,12 +25,11 @@ class GroupViewSet(viewsets.ModelViewSet):
 
 
 @api_view(['GET', 'POST'])
-def edc_glass_history(requests):
+def edc_glass_history(requests, glass_id):
     """
     API endpoint that allo connect Oracle db.
     """
     if requests.method == 'GET':
-        glass_id = requests.get('glass_id')
         try:
             cursor = connections['eda'].cursor()
             cursor.execute(
