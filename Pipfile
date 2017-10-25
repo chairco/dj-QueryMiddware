@@ -14,6 +14,7 @@ dj-database-url = "*"
 django-compressor = "*"
 python-dotenv = "*"
 cx-oracle = "*"
+pygments = "*"
 
 
 [dev-packages]
