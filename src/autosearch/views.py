@@ -4,7 +4,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.renderers import JSONRenderer
 from rest_framework.views import APIView
-from rest_framework import status
+from rest_framework import status, viewsets
 
 from autosearch import query
 from autosearch.serializers import EdcGlasshisSerializer
@@ -36,6 +36,7 @@ class EdcGlassHistoryList(APIView):
     """List all glass history.
     Example: http://localhost:8000/autosearch/cbv/?glassid=TL6AS0KAF
     """
+
     def get(self, requests, format=None):
         glass_id = requests.GET.get('glassid', None)
         queryset = query.get_edc_glass_history(glass_id)
@@ -49,6 +50,18 @@ class EdcGlassHistoryList(APIView):
         queryset = query.get_edc_glass_history(glass_id)
         serializer = EdcGlasshisSerializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class EdcGlasscHistoryViewSet(viewsets.ViewSet):
+    """A simple ViewSet for listing or retrieving edc glass history.
+    Example: http://localhost:8000/autosearch/viewset/?glassid=TL6AS0KAF
+    """
+
+    def list(self, requests):
+        glass_id = requests.GET.get('glassid', None)
+        queryset = query.get_edc_glass_history(glass_id)
+        serializer = EdcGlasshisSerializer(queryset, many=True)
+        return Response(serializer.data)
 
 
 class EdcSummaryList(APIView):
