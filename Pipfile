@@ -15,6 +15,7 @@ django-compressor = "*"
 python-dotenv = "*"
 cx-oracle = "*"
 pygments = "*"
+httpie = "*"
 
 
 [dev-packages]
