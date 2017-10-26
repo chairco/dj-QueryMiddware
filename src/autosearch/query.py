@@ -63,14 +63,43 @@ def get_teg_glass_history(glass_id):
     """Here is teg history
     rtype
     """
-    pass
+    with connections['eda'].cursor() as cursor:
+        cursor.execute(
+            """
+            SELECT "GLASS_ID", "STEP_ID", "GLASS_START_TIME"
+            FROM lcdsys.array_glass_v t
+            WHERE 1=1
+            AND t.glass_id = :glass_id
+            ORDER BY glass_Start_time ASC
+            """,
+            {'glass_id': glass_id}
+        )
+        queryset = dictfetchall(cursor)
+    return queryset
 
 
 def get_teg_data(glass_id, step_id, start_time):
     """Here is teg summary data
     rtype
     """
-    pass
+    with connections['eda'].cursor() as cursor:
+        cursor.execute(
+            """
+            SELECT *
+            FROM lcdsys.array_glass_summary_v t
+            WHERE 1=1
+            AND t.GLASS_ID = :glass_id
+            AND t.STEP_ID = :step_id
+            AND t.GLASS_START_TIME = :start_time
+            """,
+            {
+                'glass_id': glass_id,
+                'step_id': step_id,
+                'start_time': start_time
+            }
+        )
+        queryset = dictfetchall(cursor)
+    return queryset
 
 
 def get_teg_param_data(glass_id, step_id, start_time):

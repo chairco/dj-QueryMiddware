@@ -7,7 +7,7 @@ from rest_framework.views import APIView
 from rest_framework import status
 
 from autosearch import query
-from autosearch.serializers import GlasshisSerializer
+from autosearch.serializers import EdcGlasshisSerializer
 
 
 @api_view(['GET', 'POST'])
@@ -39,7 +39,7 @@ class EdcGlassHistoryList(APIView):
     def get(self, requests, format=None):
         glass_id = requests.GET.get('glassid', None)
         queryset = query.get_edc_glass_history(glass_id)
-        serializer = GlasshisSerializer(queryset, many=True)
+        serializer = EdcGlasshisSerializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, requests, format=None):
@@ -47,5 +47,17 @@ class EdcGlassHistoryList(APIView):
         body = json.loads(body_unicode)
         glass_id = body.get('glassid', None)
         queryset = query.get_edc_glass_history(glass_id)
-        serializer = GlasshisSerializer(queryset, many=True)
+        serializer = EdcGlasshisSerializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class EdcSummaryList(APIView):
+    pass
+
+
+class TegGlassHistoryList(APIView):
+    pass
+
+
+class TegSummaryList(APIView):
+    pass
