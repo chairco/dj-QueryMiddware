@@ -3,5 +3,5 @@ from quickstart import views
 
 
 urlpatterns = [
-    url(r'^(?P<glass_id>\w+)/$', views.edc_glass_history),
+    url(r'^$', views.edc_glass_history),
 ]
