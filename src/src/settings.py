@@ -16,16 +16,75 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [
+            os.path.join(BASE_DIR, 'templates').replace('\\', '/'),
+            os.path.join(BASE_DIR, 'templates/base').replace('\\', '/'),
+            # insert more TEMPLATE_DIRS here
+        ],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.template.context_processors.debug',
+                'django.template.context_processors.i18n',
+                'django.template.context_processors.media',
+                'django.template.context_processors.static',
+                'django.template.context_processors.tz',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
+
+
+import environ
+import dj_database_url
+
+env = environ.Env()
+
+# Ideally move env file should be outside the git repo
+# i.e. BASE_DIR.parent.parent
+
+env_file = os.path.join(os.path.dirname(__file__), 'local.env')
+if os.path.exists(env_file):
+    environ.Env.read_env(str(env_file))
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'pq6208m&*6h^-segl!v^9^g7pmjvb@1k_(w5x7qe&dkcdl^uyo'
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = []
+
+
+# Database
+# https://docs.djangoproject.com/en/dev/ref/settings/#databases
+
+DATABASES = {
+    # Raises ImproperlyConfigured exception if DATABASE_URL not in
+    # os.environ
+    'default': env.db(),
+    'db1': dj_database_url.config(env='DATABASE_URL_DB1'),
+    'db2': dj_database_url.config(env='DATABASE_URL_DB2'),
+    'eda': dj_database_url.config(env='DATABASE_URL_EDA')
+}
+
+# Use multi-database in django
+
+DATABASE_ROUTERS = ['src.database_router.DatabaseAppsRouter']
+DATABASE_APPS_MAPPING = {
+    # example:
+    #'app_name':'database_name',
+    'src': 'eda',
+}
 
 
 # Application definition
@@ -37,6 +96,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'autosearch',
 ]
 
 MIDDLEWARE = [
@@ -51,34 +111,8 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'src.urls'
 
-TEMPLATES = [
-    {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-            ],
-        },
-    },
-]
 
 WSGI_APPLICATION = 'src.wsgi.application'
-
-
-# Database
-# https://docs.djangoproject.com/en/1.11/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
 
 
 # Password validation
@@ -103,18 +137,51 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
-
-TIME_ZONE = 'UTC'
-
 USE_I18N = True
 
 USE_L10N = True
 
+LANGUAGE_CODE = 'en'
+
+LANGUAGES = [
+    ('zh-hant', 'Traditional Chinese'),
+    ('en-us',   'English (US)'),
+]
+
+FALLBACK_LANGUAGE_PREFIXES = {
+    'zh': 'zh-hant',
+    'en': 'en-us',
+}
+
+from django.conf import locale
+if 'en-us' not in locale.LANG_INFO:
+    locale.LANG_INFO['en-us'] = {
+        'bidi': False,
+        'code': 'en-us',
+        'name': 'English (US)',
+        'name_local': 'English (US)',
+    }
+
 USE_TZ = True
+
+TIME_ZONE = 'Asia/Taipei'
 
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+# REST FRAMEWORK
+# http://www.django-rest-framework.org/
+
+REST_FRAMEWORK = {
+    'DEFAULT_PARSER_CLASSES': (
+        'rest_framework.parsers.JSONParser',
+    ),
+    #'DEFAULT_PERMISSION_CLASSES': [
+    #    'rest_framework.permissions.IsAdminUser',
+    #],
+    'PageNumberPagination': 10
+}
