@@ -11,7 +11,7 @@ from autosearch.serializers import EdcGlasshisSerializer
 
 
 @api_view(['GET', 'POST'])
-def edc_glass_history(requests):
+def edc_glass_history(requests, format=None):
     """API endpoint that allo connect Oracle db.
     Example: http://localhost:8000/autosearch/?glassid=TL6AS0KAF
     """
