@@ -4,5 +4,5 @@ from autosearch import views
 
 urlpatterns = [
     url(r'^$', views.edc_glass_history),
-    #url(r'^(?P<glassid>.+)/$', views.edc_glass_history),
+    url(r'^cbv/$', views.EdcGlassHistoryList.as_view()),
 ]
