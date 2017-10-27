@@ -11,8 +11,8 @@ class ViewSetTest(TestCase):
     """test suite for the api viewset
     """
 
-    def test_view_set(self):
-        requests = APIRequestFactory().get("")
+    def test_viewset(self):
+        requests = APIRequestFactory().get('/edcgh/')
         edc_detail = EdcGlasscHistoryViewSet.as_view({'get': 'list'})
         response = edc_detail(requests)
         self.assertEqual(response.status_code, 200)
@@ -26,5 +26,7 @@ class ViewTestCase(TestCase):
         """Define the test client and other test variable
         """
         self.client = APIClient()
-        self.glassid = {'glassid': 'TL6AS0KAF'}
-        self.response = self.client.get()
+    
+    def test_view(self):
+        response = self.client.get('/fdv/')
+        self.assertEqual(response.status_code, 200)
