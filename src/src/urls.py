@@ -22,7 +22,6 @@ from autosearch import views
 # Create a router and register our viewsets withit 
 router = routers.DefaultRouter()
 router.register(r'edcgh', views.EdcGlasscHistoryViewSet, base_name='edcgh')
-#urlpatterns = router.urls
 
 
 urlpatterns = [

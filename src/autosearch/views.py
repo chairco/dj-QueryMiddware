@@ -9,8 +9,6 @@ from rest_framework import mixins
 
 from autosearch import query, serializers
 
-from concurrent import futures
-
 
 @api_view(['GET', 'POST'])
 def edc_glass_history(requests, format=None):
@@ -19,6 +17,8 @@ def edc_glass_history(requests, format=None):
     """
     if requests.method == 'GET':
         glass_id = requests.GET.get('glassid', None)
+        if glass_id != None:
+            glass_id = [g.strip() for g in glass_id.split(',')]
 
     elif requests.method == 'POST':
         body_unicode = requests.body.decode('utf-8')
@@ -26,12 +26,16 @@ def edc_glass_history(requests, format=None):
         glass_id = body.get('glassid', None)
 
     try:
-        queryset = query.get_edc_glass_history(glass_id)
+        if len(glass_id) > 1:
+            # concurrenct query
+            queryset = query.query_many(query.get_edc_glass_history, glass_id)
+        else:
+            queryset = query.get_edc_glass_history(glass_id)
+        json = JSONRenderer().render(queryset)
+        return Response(json, status=status.HTTP_200_OK)
     except Exception as e:
-        return HttpResponse(e)
-
-    json = JSONRenderer().render(queryset)
-    return Response(json, status=status.HTTP_200_OK)
+        #return HttpResponse(e)
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
 
 class EdcGlassHistoryList(APIView):
@@ -44,7 +48,7 @@ class EdcGlassHistoryList(APIView):
         """
         glass_id = requests.GET.get('glassid', None)
         queryset = query.get_edc_glass_history(glass_id)
-        serializer = EdcGlasshisSerializer(queryset, many=True)
+        serializer = serializers.EdcGlasshisSerializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, requests, format=None):
@@ -59,6 +63,7 @@ class EdcGlassHistoryList(APIView):
 class EdcGlasscHistoryViewSet(viewsets.ViewSet):
     """A simple ViewSet for listing or retrieving edc glass history.
     Example: http://localhost:8000/autosearch/viewset/?glassid=TL6AS0KAF
+    Example: http://localhost:8000/edcgh/?glassid=TL6AS0KAF
     """
     serializer_class = serializers.EdcGlasshisSerializer
 

@@ -1,6 +1,8 @@
 # autosearch/qyery.py
 from django.db import connections
 
+from concurrent import futures
+
 
 MAX_WORKER = 200
 
