@@ -9,6 +9,8 @@ from rest_framework import mixins
 
 from autosearch import query, serializers
 
+from concurrent import futures
+
 
 @api_view(['GET', 'POST'])
 def edc_glass_history(requests, format=None):
@@ -38,6 +40,8 @@ class EdcGlassHistoryList(APIView):
     """
 
     def get(self, requests, format=None):
+        """glass_id is list type, should be type check and transfer.
+        """
         glass_id = requests.GET.get('glassid', None)
         queryset = query.get_edc_glass_history(glass_id)
         serializer = EdcGlasshisSerializer(queryset, many=True)

@@ -2,6 +2,9 @@
 from django.db import connections
 
 
+MAX_WORKER = 200
+
+
 def dictfetchall(cursor):
     """Return all rows from a cursor as a dict
     """
@@ -126,3 +129,25 @@ def get_sid_with_param(glass_id):
     """
     pass
 
+
+def query_many(query, glass_id):
+    """Query oracle db by mutiplethread
+    :type query: query object
+    :type glass_id: list
+    :rtype dict()  
+    """
+    workers = min(MAX_WORKER, len(glass_id))
+    with futures.ThreadPoolExecutor(max_workers=workers) as executor:
+        future_to_gid = {executor.submit(
+            query, g_id): g_id for g_id in sorted(glass_id)}
+        result = {}
+        for future in futures.as_completed(future_to_gid):
+            g_id = future_to_gid[future]
+            try:
+                data = future.result()
+            except Exception as exc:
+                print('%r generated an exception: %s' % (g_id, exc))
+            else:
+                print('%r glass_id has %d rows' % (g_id, len(data)))
+            result.setdefault(g_id, data)
+    return result
