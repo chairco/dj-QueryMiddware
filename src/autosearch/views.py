@@ -5,9 +5,9 @@ from rest_framework.response import Response
 from rest_framework.renderers import JSONRenderer
 from rest_framework.views import APIView
 from rest_framework import status, viewsets
+from rest_framework import mixins
 
-from autosearch import query
-from autosearch.serializers import EdcGlasshisSerializer
+from autosearch import query, serializers
 
 
 @api_view(['GET', 'POST'])
@@ -56,11 +56,12 @@ class EdcGlasscHistoryViewSet(viewsets.ViewSet):
     """A simple ViewSet for listing or retrieving edc glass history.
     Example: http://localhost:8000/autosearch/viewset/?glassid=TL6AS0KAF
     """
+    serializer_class = serializers.EdcGlasshisSerializer
 
     def list(self, requests):
         glass_id = requests.GET.get('glassid', None)
         queryset = query.get_edc_glass_history(glass_id)
-        serializer = EdcGlasshisSerializer(queryset, many=True)
+        serializer = serializers.EdcGlasshisSerializer(queryset, many=True)
         return Response(serializer.data)
 
 
