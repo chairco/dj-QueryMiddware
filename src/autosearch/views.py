@@ -15,6 +15,8 @@ def edc_glass_history(requests, format=None):
     """API endpoint that allo connect Oracle db.
     Example: http://localhost:8000/autosearch/?glassid=TL6AS0KAF
     """
+    import json
+
     if requests.method == 'GET':
         glass_id = requests.GET.get('glassid', None)
         if glass_id != None:
