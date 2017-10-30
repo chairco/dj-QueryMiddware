@@ -9,7 +9,6 @@ from autosearch import views
 urlpatterns = [
     url(r'^edch/$', views.EdcGlassHistoryList.as_view()),
     url(r'^edcs/$', views.EdcSummaryList.as_view()),
-    #url(r'^fbv/$', views.edc_glass_history),
 ]
 
 # Add suffix patterns
