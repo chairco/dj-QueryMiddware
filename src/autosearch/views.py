@@ -63,7 +63,7 @@ class EdcGlasscHistoryViewSet(viewsets.ViewSet):
 
 class EdcGlassHistoryList(APIView):
     """List all glass history.
-    Example: http://localhost:8000/autosearch/edchistory/?glassid=TL6AS0KAF
+    Example: http://localhost:8000/autosearch/edch/?glassid=TL6AS0KAF
     """
 
     def get(self, requests, format=None):
