@@ -132,7 +132,7 @@ def get_sid_with_param(glass_id):
     pass
 
 
-def query_edch_currency(query, glass_id):
+def query_edch_concurrency(query, glass_id):
     """Query oracle db by mutiplethread
     :type query: query object
     :type glass_id: list
@@ -156,7 +156,7 @@ def query_edch_currency(query, glass_id):
     return result
 
 
-def query_edcs_currency(query, datas):
+def query_edcs_concurrency(query, datas):
     """
     Query oracle db with chain data by mutipleprocess
     :type query: query object

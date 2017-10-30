@@ -34,7 +34,7 @@ def edc_glass_history(requests, format=None):
     try:
         if len(glass_id) > 1:
             # concurrenct query
-            queryset = query.query_edch_cocurrency(query.get_edc_glass_history, glass_id)
+            queryset = query.query_edch_concurrency(query.get_edc_glass_history, glass_id)
         else:
             queryset = query.get_edc_glass_history(glass_id[0])
         json = JSONRenderer().render(queryset)
@@ -85,7 +85,7 @@ class EdcGlassHistoryList(APIView):
 
 class EdcSummaryList(APIView):
     """List all glass summary.
-    Example: http://localhost:8000/edcs/?glassid=TL6AS0KAF
+    Example: http://localhost:8000/autosearch/edcs/?glassid=TL6AS0KAF
     """
     serializer_class = serializers.EdcSerializer
 
@@ -97,12 +97,13 @@ class EdcSummaryList(APIView):
         if glass_id != None:
             glass_id = [g.strip() for g in glass_id.split(',')]
         
-        datas = query.query_edch_cocurrency(query.get_edc_glass_history, glass_id)
+        datas = query.query_edch_concurrency(query.get_edc_glass_history, glass_id)
         values = list(chain.from_iterable(datas.values()))
-        queryset = query.query_edcs_cocurrency(query.get_edc_data, values)
+        queryset = query.query_edcs_concurrency(query.get_edc_data, values)
         #serializers = serializers.EdcSerializer(queryset, many=True)
         #return Response(serializer.data)
-        return Response(queryset)
+        json = JSONRenderer().render(queryset)
+        return Response(json, status=status.HTTP_200_OK)
 
     def post(self, requests, format=None):
         body_unicode = requests.body.decode('utf-8')
