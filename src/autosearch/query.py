@@ -132,7 +132,7 @@ def get_sid_with_param(glass_id):
     pass
 
 
-def query_many(query, glass_id):
+def query_edch_currency(query, glass_id):
     """Query oracle db by mutiplethread
     :type query: query object
     :type glass_id: list
@@ -150,6 +150,34 @@ def query_many(query, glass_id):
             except Exception as exc:
                 print('%r generated an exception: %s' % (g_id, exc))
             else:
-                print('%r glass_id has %d rows' % (g_id, len(data)))
+                pass
+                #print('%r glass_id has %d rows' % (g_id, len(data)))
             result.setdefault(g_id, data)
+    return result
+
+
+def query_edcs_currency(query, datas):
+    """
+    Query oracle db with chain data by mutipleprocess
+    :type query: query object
+    :type datas: list
+    :rtype dict()  
+    """
+    workers = min(50, len(datas))
+    with futures.ProcessPoolExecutor(max_workers=workers) as executor:
+        future_to_sid = {
+            executor.submit(
+                query, value['GLASS_ID'], value['STEP_ID'], value['GLASS_START_TIME']): value['GLASS_ID'] + '_' + value['STEP_ID'] for value in datas
+        }
+        result = {}
+        for future in futures.as_completed(future_to_sid):
+            g_s_id = future_to_sid[future]
+            try:
+                data = future.result()
+            except Exception as exc:
+                print('%r generated an exception: %s' % (g_s_id, exc))
+            else:
+                #print('%r step_id has %d rows' % (g_s_id, len(data)))
+                pass
+            result.setdefault(g_s_id, data)
     return result
