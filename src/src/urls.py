@@ -20,12 +20,12 @@ from rest_framework import routers
 from autosearch import views
 
 # Create a router and register our viewsets withit 
-router = routers.DefaultRouter()
-router.register(r'edcgh', views.EdcGlasscHistoryViewSet, base_name='edcgh')
+#router = routers.DefaultRouter()
+#router.register(r'edcgh', views.EdcGlasscHistoryViewSet, base_name='edcgh')
 
 
 urlpatterns = [
-    url(r'^', include(router.urls)),
+    #url(r'^', include(router.urls)),
     url(r'^autosearch/', include('autosearch.urls')),
     url(r'^admin/', admin.site.urls),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
