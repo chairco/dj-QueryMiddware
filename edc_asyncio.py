@@ -5,7 +5,7 @@ import aiohttp
 from edc import BASE_URL, show, main
 
 
-content = {}
+#content = {}
 
 @asyncio.coroutine
 def get_glass_history(glass_id):
@@ -14,16 +14,18 @@ def get_glass_history(glass_id):
      with aiohttp.ClientSession() as session:
         resp = yield from session.get(url)     
         data = yield from resp.text()
-        return len(data)
+        
+        return data
 
 
 @asyncio.coroutine
 def get_one(glass_id, semaphore):
     with (yield from semaphore):
         data = yield from get_glass_history(glass_id)
-        show(glass_id, data)
-        content.setdefault(glass_id, data)
-    return glass_id
+        show(glass_id, len(data))
+        #content.setdefault(glass_id, data)
+    
+    return {glass_id: data}  # data return type
 
 
 @asyncio.coroutine
@@ -31,6 +33,7 @@ def quote_many(glass_list, conn_limit=20):
     semaphore = asyncio.Semaphore(conn_limit)
     coroutines = [get_one(glassid, semaphore) for glassid in sorted(glass_list)]
     quotes = yield from asyncio.gather(*coroutines)
+    
     return quotes
 
 
@@ -42,7 +45,7 @@ def get_many(glass_list):
     quotes = loop.run_until_complete(quote_many(glass_list=glass_list, conn_limit=100))
     loop.close()
 
-    return len(quotes)
+    return quotes
 
 
 if __name__ == '__main__':
