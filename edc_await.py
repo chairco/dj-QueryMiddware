@@ -13,7 +13,7 @@ async def get_glass_history(glass_id):
     url = '{}={glass_id}'.format(BASE_URL, glass_id=glass_id)
     async with aiohttp.ClientSession() as session:
         async with session.get(url) as resp:
-            #data = await resp.text()
+            # data = await resp.text()
             data = await resp.json()
 
     return data
@@ -24,15 +24,15 @@ async def get_one(glass_id, semaphore):
         data = await get_glass_history(glass_id)
         show(glass_id, len(data))
         #content.setdefault(glass_id, data)
-    
-    return {glass_id: data} # data return type
+
+    return {glass_id: data}  # data return type
 
 
 async def quote_many(glass_list, conn_limit=20):
     semaphore = asyncio.Semaphore(conn_limit)
-    coroutines = [get_one(glassid, semaphore) for glassid in sorted(glass_list)]
+    coroutines = [get_one(glassid, semaphore)
+                  for glassid in sorted(glass_list)]
     quotes = await asyncio.gather(*coroutines)
-
     return quotes
 
 
@@ -42,9 +42,9 @@ def get_many(glass_list):
     #wait_coro = asyncio.wait(to_do)
     #res, _ = loop.run_until_complete(wait_coro)
     conn_limit = min(len(glass_list), 80)
-    quotes = loop.run_until_complete(quote_many(glass_list=glass_list, conn_limit=conn_limit))
+    quotes = loop.run_until_complete(quote_many(
+        glass_list=glass_list, conn_limit=conn_limit))
     loop.close()
-
     return quotes
 
 

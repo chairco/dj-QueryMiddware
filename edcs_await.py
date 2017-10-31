@@ -42,7 +42,6 @@ async def quote_many(datas, conn_limit=20):
         ) for data in datas
     ]
     quotes = await asyncio.gather(*coroutines)
-    
     return quotes
 
 
@@ -50,7 +49,6 @@ def get_many(data_list):
     loop = asyncio.get_event_loop()
     quotes = loop.run_until_complete(quote_many(datas=data_list, conn_limit=30))
     loop.close()
-    
     return quotes
 
 
