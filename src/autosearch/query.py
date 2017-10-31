@@ -25,7 +25,7 @@ def get_edc_glass_history(glass_id):
     with connections['eda'].cursor() as cursor:
         cursor.execute(
             """
-            SELECT "GLASS_ID", "STEP_ID", "GLASS_START_TIME" 
+            SELECT "GLASS_ID", "STEP_ID", "GLASS_START_TIME", "SUB_EQUIP_ID" 
             FROM lcdsys.array_pds_glass_t t
             WHERE 1=1
             AND t.glass_id = :glass_id

@@ -5,12 +5,14 @@ class EdcGlasshisSerializer(serializers.Serializer):
     GLASS_ID = serializers.CharField()
     STEP_ID = serializers.CharField()
     GLASS_START_TIME = serializers.DateTimeField()
+    SUB_EQUIP_ID = serializers.CharField()
 
 
 class EdcSerializer(serializers.Serializer):
     GLASS_ID = serializers.CharField()
     STEP_ID = serializers.CharField()
     GLASS_START_TIME = serializers.DateTimeField()
+    SUB_EQUIP_ID = serializers.CharField()
     PARAM_NAME = serializers.CharField()
     PARAM_VALUE = serializers.FloatField()
 
