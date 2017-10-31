@@ -9,8 +9,6 @@ from rest_framework import mixins
 
 from autosearch import query, serializers
 
-from itertools import chain
-
 from datetime import datetime
 
 
@@ -47,7 +45,7 @@ class EdcSummaryList(APIView):
         glass_id = requests.GET.get('glassid', None)
         step_id = requests.GET.get('stepid', None)
         start_time = requests.GET.get('starttime', None)
-        starttime = datetime.strptime(str(20161020012712), "%Y%m%d%H%M%S")
+        start_time = datetime.strptime(start_time, "%Y%m%d%H%M%S") # conver to datetime, but oracle also accept format "201712101010"
         queryset = query.get_edc_data(glass_id, step_id, start_time)
         serializer = serializers.EdcSerializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
