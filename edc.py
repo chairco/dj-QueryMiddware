@@ -9,7 +9,7 @@ with open('sample-300.csv', 'r') as fp:
 
 glass_id = [i.rstrip() for i in glass_id]
 
-glass_list = glass_id[:100]
+glass_list = glass_id
 
 
 BASE_URL = 'http://localhost:8000/autosearch/edch/?glassid'
@@ -35,7 +35,6 @@ def get_many(glass_list):
 
 
 def main(get_many):
-    print('Total: {}'.format(len(glass_list)))
     t0 = time.time()
     count = get_many(glass_list=glass_list)
     elapsed = time.time() - t0
