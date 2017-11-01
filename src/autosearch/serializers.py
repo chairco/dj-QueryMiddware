@@ -30,7 +30,7 @@ class TegSerializer(serializers.Serializer):
     PARAM_NAME = serializers.CharField()
     PARAM_VALUE = serializers.FloatField()
     TTL_COUNT = serializers.IntegerField()
-    AVG_VLAUE = serializers.FloatField()
+    AVG_VALUE = serializers.FloatField()
     STD_VALUE = serializers.FloatField()
     MAX_VALUE = serializers.FloatField()
     MIN_VALUE = serializers.FloatField()
