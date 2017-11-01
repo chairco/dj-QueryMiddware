@@ -81,7 +81,7 @@ class TegGlassHistoryList(APIView):
         serializer = serializers.TegGlasshisSerializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    def poas(self, requests, format=None):
+    def post(self, requests, format=None):
         pass
 
 
@@ -99,5 +99,5 @@ class TegSummaryList(APIView):
         serializer = serializers.TegSerializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    def poas(self, requests, format=None):
+    def post(self, requests, format=None):
         pass
