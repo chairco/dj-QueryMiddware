@@ -1,3 +1,44 @@
+## API 文件
+
+### Query EDC GLASS HISTORY [/autosearch/edch/?glassid={glass_id}]
+
+依據 `GlassID` 搜尋紀錄。
+
++ Respones 200 (application/json)
+
+```
+[
+    {
+        "GLASS_ID": "xxx",
+        "STEP_ID": "xxx",
+        "GLASS_START_TIME": "xxxx-xx-xxTxx:xx:xx+08:00",
+        "SUB_EQUIP_ID": "STRP0300"
+    },
+    ...
+]
+```
+
+### Query EDC GLASS SUMMARY [/autosearch/edcs/?glassid={}&stepid={}$starttime={}]
+
+依據 `GlassID`, `StepID`, `GlassStartTime` 搜尋量測記錄。
+
++ Response 200 (application/json)
+    
+```
+[
+    {
+        "GLASS_ID": "xxx",
+        "STEP_ID": "xxx",
+        "GLASS_START_TIME": "xxx-xx-xxTxx:xx:xx+08:00",
+        "SUB_EQUIP_ID": "xxx",
+        "PARAM_NAME": "xx",
+        "PARAM_VALUE": xx
+    },
+```
+
+
+***
+
 ## HTTP回傳狀態碼
 
 API回傳的結果，應使用適當的HTTP狀態碼，所以API設計者必須了解它們。以下是一些常用的狀態碼，完整列表請參考Wikipedia。

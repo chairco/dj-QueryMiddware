@@ -19,13 +19,17 @@ from django.contrib import admin
 from rest_framework import routers
 from autosearch import views
 
+from rest_framework_swagger.views import get_swagger_view
+
 # Create a router and register our viewsets withit 
 #router = routers.DefaultRouter()
 #router.register(r'edcgh', views.EdcGlasscHistoryViewSet, base_name='edcgh')
 
+schema_view = get_swagger_view(title='API')
 
 urlpatterns = [
     #url(r'^', include(router.urls)),
+    url(r'^$', schema_view),
     url(r'^autosearch/', include('autosearch.urls')),
     url(r'^admin/', admin.site.urls),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))

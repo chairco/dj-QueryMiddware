@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework.renderers import JSONRenderer
 from rest_framework.views import APIView
 from rest_framework import status, viewsets
-from rest_framework import mixins
+from rest_framework.permissions import IsAuthenticated
 
 from autosearch import query, serializers
 
@@ -17,11 +17,15 @@ from dateutil.parser import parse
 
 class EdcGlassHistoryList(APIView):
     """List all glass edc history.
-    Example: http://localhost:8000/autosearch/edch/?glassid=TL6AS0KAF
+    Example: 
+        http://localhost:8000/autosearch/edch/?glassid=TL6AS0KAF
     """
+    permission_classes = (IsAuthenticated,)
 
     def get(self, requests, format=None):
         """glass_id is list type, should be type check and transfer.
+        Example: 
+            http://localhost:8000/autosearch/edch/?glassid=TL6AS0KAF
         """
         glass_id = requests.GET.get('glassid', None)
         queryset = query.get_edc_glass_history(glass_id)
@@ -42,9 +46,12 @@ class EdcSummaryList(APIView):
     Example: 
         http://localhost:8000/autosearch/edcs/?glassid=TL6AJ0HAV&stepid=1200&starttime=20161020012712
     """
+    permission_classes = (IsAuthenticated,)
 
     def get(self, requests, format=None):
         """glass_id is list type, should be type check and transfer.
+        Example:
+            http://localhost:8000/autosearch/edcs/?glassid=TL6AJ0HAV&stepid=1200&starttime=20161020012712
         """
         glass_id = requests.GET.get('glassid', None)
         step_id = requests.GET.get('stepid', None)
@@ -75,7 +82,13 @@ class TegGlassHistoryList(APIView):
     Example:
         Example: http://localhost:8000/autosearch/tegh/?glassid=TL6AS0KAF
     """
+    permission_classes = (IsAuthenticated,)
+
     def get(self, requests, format=None):
+        """
+        Example:
+            http://localhost:8000/autosearch/tegh/?glassid=TL6AS0KAF
+        """
         glass_id = requests.GET.get('glassid', None)
         queryset = query.get_teg_glass_history(glass_id)
         serializer = serializers.TegGlasshisSerializer(queryset, many=True)
@@ -90,7 +103,13 @@ class TegSummaryList(APIView):
     Example:
         http://localhost:8000/autosearch/tegs/?glassid=TL6AS0KAF&stepid=2230&starttime=20161027173851
     """
+    permission_classes = (IsAuthenticated,)
+
     def get(self, requests, format=None):
+        """
+        Example:
+            http://localhost:8000/autosearch/tegs/?glassid=TL6AS0KAF&stepid=2230&starttime=20161027173851
+        """
         glass_id = requests.GET.get('glassid', None)
         step_id = requests.GET.get('stepid', None)
         start_time = requests.GET.get('starttime', None)
