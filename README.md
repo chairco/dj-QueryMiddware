@@ -18,7 +18,7 @@
 ]
 ```
 
-### Query EDC GLASS SUMMARY [/autosearch/edcs/?glassid={}&stepid={}$starttime={}]
+### Query EDC GLASS SUMMARY [/autosearch/edcs/?glassid={}&stepid={}&starttime={}]
 
 依據 `GlassID`, `StepID`, `GlassStartTime` 搜尋量測記錄。
 
@@ -34,6 +34,8 @@
         "PARAM_NAME": "xx",
         "PARAM_VALUE": xx
     },
+    ...
+]
 ```
 
 
